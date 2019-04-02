@@ -374,6 +374,7 @@ class Apprise(object):
                 'setup_url': getattr(plugin, 'setup_url', None),
                 'protocols': protocols,
                 'secure_protocols': secure_protocols,
+                'details': plugins.details(plugin),
             })
 
         return response

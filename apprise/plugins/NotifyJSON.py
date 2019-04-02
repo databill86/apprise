@@ -56,6 +56,46 @@ class NotifyJSON(NotifyBase):
     # local anyway
     request_rate_per_sec = 0
 
+    # Define object templates
+    templates = (
+        '{schema}://{host}',
+        '{schema}://{host}:{port}',
+        '{schema}://{user}@{host}:{port}',
+        '{schema}://{user}:{pass}@{host}:{port}',
+    )
+
+    # Define our tokens; these are the minimum tokens required required to
+    # be passed into this function (as arguments). The syntax appends any
+    # previously defined in the base package and builds onto them
+    template_tokens = dict(NotifyBase.template_tokens, **{
+        'host': {
+            'type': 'string',
+            'required': True,
+        },
+        'port': {
+            'type': 'int',
+            'min': 1,
+            'max': 65535,
+        },
+        'user': {
+            'type': 'string',
+        },
+        'password': {
+            'type': 'string',
+            'private': True,
+        },
+    })
+
+    # Define any kwargs we're using
+    template_kwargs = {
+        '+': {
+            'key': '{http_header_name}',
+            'value': {
+                'type': 'string',
+            }
+        },
+    }
+
     def __init__(self, headers=None, **kwargs):
         """
         Initialize JSON Object
